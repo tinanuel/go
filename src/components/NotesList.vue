@@ -1,36 +1,47 @@
 <template>
-	<div class="list-group pt-3 pb-5 px-1">
-		<div v-for="note in notes" v-bind:key="note.name" class="list-group-item">
-			<div class="float-end">
-				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-outline-danger" v-on:click="deleteNote(note)">
-						<i class="bi bi-trash-fill"></i>
-					</button>
-					<button type="button" class="btn btn-outline-secondary" v-on:click="showNote(note)">
-						<i class="bi bi-eye-fill"></i>
-					</button>
-				</div>
-			</div>
-			<h5 class="mb-1">{{ note.name }}</h5>
-			<p class="text-muted">Utworzono {{ note.createdAt }}</p>
-		</div>
-	</div>
+<div class="p-3 h-75">
+<h3 class="my-3">Moje notatki</h3>
+<div id="notes" class="collapse show h-100">
+<div v-if="notes.length > 0" class="h-100 overflow-auto">
+<div v-for="note in notes" v-bind:key="note.id" class="border bg-white p-2 my-2">
+<div class="text-end">
+<div class="btn-group" role="group">
+<button v-on:click="onRemove(note)" type="button" class="btn btn-outline-danger">
+<i class="bi-trash-fill"></i>
+</button>
+<button v-on:click="onShow(note)" type="button" class="btn btn-outline-secondary">
+<i class="bi-eye-fill"></i>
+</button>
+</div>
+</div>
+<div class="text-center">
+{{note.name}}
+<small class="text-muted">({{note.date}})</small>
+</div>
+</div>
+</div>
+<div v-else class="alert alert-secondary rounded-0" role="alert">
+Jeszcze nie ma żadnych notatek do wyświetlenia
+</div>
+</div>
+<a class="btn btn-outline-secondary w-100 rounded-0 d-block d-md-none"
+data-bs-toggle="collapse" href="#notes" role="button" aria-expanded="true" aria-controls="notes">
+Notatki
+</a>
+</div>
 </template>
 
-<script>	
-	export default {
-		components: {},
-		props: ['notes'],
-		data: function (){
-			return {}
-		},
-		methods: {
-			showNote: function(note){
-				this.$emit("on-show-note", note);
-			},
-			deleteNote: function(note){
-				this.$emit("on-delete-note", note);
-			},
-		},
-	}
+<script>
+export default {
+props: ['notes'],
+data: function (){ return {}},
+methods: {
+onRemove: function (note){
+this.$emit('note-remove', note);
+},
+onShow: function (note){
+this.$emit('note-show', note);
+}
+}
+}
 </script>

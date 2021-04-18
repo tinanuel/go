@@ -51,8 +51,18 @@
 		},
 		methods: {
 			addNote: function(note) {
+			var newNote = {
+            name: note.name,
+            content: note.content,
+                  };
+             this.$http.post('notes', newNote).then((response) => {
+             this.notes.push(response.data);
+             this.showAddForm = false;
+             this.currentNote = response.data;
+             });
 				this.notes.push(note);
 			},
+			
 			showNote: function(note) {
 				this.currentNote = note;
 			},
@@ -63,6 +73,12 @@
 				this.notes = this.notes.filter((n) => n !== note);
 			}
 		},
+		mounted() {
+             this.$http.get('notes').then(response => {
+             this.notes = response.data;
+                  });
+}
+
 	}
 </script>
 
